@@ -24,14 +24,14 @@ impl<'a, 'b> Context<'a, 'b> {
     self.handled_comments.insert(comment.start());
   }
 
-  pub fn start_line_with_comments(&mut self, node: &dyn Ranged) -> usize {
+  pub fn start_line_with_comments<R: Ranged>(&mut self, node: &R) -> usize {
     // The start position with comments is the next non-whitespace position
     // after the previous token's trailing comments. The trailing comments
     // are similar to the Roslyn definition where it's any comments on the
     // same line or a single multi-line block comment that begins on the trailing line.
     let start = node.start();
     if let Some(leading_comments) = self.comments.get(&start) {
-      if let Some(previous_token) = self.token_finder.get_previous_token(node) {
+      if let Some(previous_token) = self.token_finder.get_previous_token(node.start()) {
         let previous_end_line = previous_token.end_line();
         let mut past_trailing_comments = false;
         for comment in leading_comments.iter() {
@@ -59,7 +59,7 @@ impl<'a, 'b> Context<'a, 'b> {
     // start searching from after the trailing comma if it exists
     let (search_end, previous_end_line) = self
       .token_finder
-      .get_next_token_if_comma(node)
+      .get_next_token_if_comma(node.end())
       .map(|x| (x.end(), x.end_line()))
       .unwrap_or((node.end(), node.end_line()));
 

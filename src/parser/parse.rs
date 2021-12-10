@@ -289,7 +289,7 @@ fn parse_comma_separated_value<'a>(value: Option<Node<'a, 'a>>, parsed_comma: Pr
 
   fn get_comma_token<'a, 'b>(element: &Option<Node>, context: &mut Context<'a, 'b>) -> Option<&'b TokenAndRange<'a>> {
     if let Some(element) = element {
-      context.token_finder.get_next_token_if_comma(element)
+      context.token_finder.get_next_token_if_comma(element.end())
     } else {
       None
     }
