@@ -20,6 +20,7 @@ impl<'a> TokenFinder<'a> {
   pub fn get_next_token_if_comma(&mut self, end_offset: usize) -> Option<&'a TokenAndRange<'a>> {
     // self.inner.get_next_token_if(node.end(), |token| token.token == Token::Comma)
     // unimplemented!() // TODO
+    println!("next", );
     let next_token = match self.inner.0.binary_search_by(|tok| tok.start().cmp(&end_offset)) {
       Ok(index) => Some(&self.inner.0[index]),
       // previous token is a trivial token like whitespace
@@ -40,6 +41,7 @@ impl<'a> TokenFinder<'a> {
 
   #[inline]
   pub fn get_previous_token(&mut self, start_offset: usize) -> Option<&'a TokenAndRange<'a>> {
+    println!("previous", );
     // self.inner.get_previous_token(start_offset)
     if start_offset == 0 {
       None
